@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Data Siswa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f5f5fe',
+                            100: '#eceffe',
+                            500: '#5b61f4',
+                            600: '#4a4fe0',
+                            700: '#3c40c6',
+                        },
+                        bgMain: '#eef2f8',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #eef2f8;
+        }
+        .card-panel {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
+        }
+        .form-input, .form-select {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            width: 100%;
+            outline: none;
+            transition: all 0.2s;
+            color: #334155;
+            background-color: #ffffff;
+        }
+        .form-input:focus, .form-select:focus {
+            border-color: #5b61f4;
+            box-shadow: 0 0 0 3px rgba(91, 97, 244, 0.15);
+        }
+        .form-input::placeholder {
+            color: #94a3b8;
+        }
+        .radio-custom {
+            accent-color: #5b61f4;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6 md:p-8 min-h-screen">
+
+    <div class="max-w-6xl mx-auto space-y-6">
+
+        <div id="toast-notification" class="hidden fixed top-5 right-5 z-50 flex items-center p-4 mb-4 text-gray-700 bg-white rounded-lg shadow-lg border-l-4 border-brand-500 transition-all duration-300" role="alert">
+            <i id="toast-icon" class="fa-solid fa-circle-check text-brand-500 text-xl mr-3"></i>
+            <div id="toast-message" class="text-sm font-medium">Data berhasil disimpan.</div>
+        </div>
+
+        <div id="delete-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl text-center space-y-4 transform transition-all scale-95 duration-200">
+                <div class="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto text-xl">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-800">Hapus Data Siswa?</h3>
+                <p class="text-sm text-gray-500">Apakah Anda yakin ingin menghapus data siswa ini? Tindakan ini tidak dapat dibatalkan.</p>
+                <div class="flex gap-3 justify-center pt-2">
+                    <button onclick="closeDeleteModal()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition">Batal</button>
+                    <button id="confirm-delete-btn" class="px-4 py-2 bg-red-500 text-white rounded-lg text-sm font-medium hover:bg-red-600 transition">Ya, Hapus</button>
+                </div>
+            </div>
+        </div>
+
+        <section class="card-panel p-5 sm:p-7">
+
+            <div class="flex items-center gap-3 mb-6">
+                <i class="fa-solid fa-user-plus text-brand-500 text-lg"></i>
+                <h2 id="form-title" class="text-base sm:text-lg font-bold text-gray-800">Tambah Data Siswa</h2>
+            </div>
+
+            
+            <form id="student-form" onsubmit="handleFormSubmit(event)" class="space-y-5">
+                <input type="hidden" id="edit-id" value="">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8">
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label for="nis" class="block text-sm font-semibold text-gray-700 mb-1.5">NIS</label>
+                            <input type="text" id="nis" required placeholder="Masukkan NIS" class="form-input text-sm">
+                        </div>
+
+                        <div>
+                            <label for="nama" class="block text-sm font-semibold text-gray-700 mb-1.5">Nama Lengkap</label>
+                            <input type="text" id="nama" required placeholder="Masukkan nama lengkap" class="form-input text-sm">
+                        </div>
+
+                        <div>
+                            <label for="kelas" class="block text-sm font-semibold text-gray-700 mb-1.5">Kelas</label>
+                            <select id="kelas" required class="form-select text-sm">
+                                <option value="" disabled selected>Pilih kelas</option>
+                                <option value="X RPL 1">X RPL 1</option>
+                                <option value="X RPL 2">X RPL 2</option>
+                                <option value="X RPL 3">X RPL 3</option>
+                                <option value="XI RPL 1">XI RPL 1</option>
+                                <option value="XI RPL 2">XI RPL 2</option>
+                                <option value="XII RPL 1">XII RPL 1</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Kolom Kanan -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-3">Jenis Kelamin</label>
+                            <div class="flex items-center gap-8 pt-1">
+                                <label class="flex items-center gap-2.5 cursor-pointer text-sm font-medium text-gray-700">
+                                    <input type="radio" name="jenis_kelamin" value="Laki-laki" class="radio-custom" checked>
+                                    <span>Laki-laki</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 cursor-pointer text-sm font-medium text-gray-700">
+                                    <input type="radio" name="jenis_kelamin" value="Perempuan" class="radio-custom">
+                                    <span>Perempuan</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="pt-1">
+                            <label for="tanggal_lahir" class="block text-sm font-semibold text-gray-700 mb-1.5">Tanggal Lahir</label>
+                            <div class="relative">
+                                <input type="date" id="tanggal_lahir" required class="form-input text-sm pr-10">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tombol Aksi Form -->
+                <div class="flex items-center gap-3 pt-3">
+                    <button type="submit" id="submit-btn" class="bg-brand-500 hover:bg-brand-600 text-white font-medium text-sm px-5 py-2.5 rounded-lg flex items-center gap-2 shadow-sm transition-all duration-150 active:scale-95">
+                        <i id="btn-icon" class="fa-solid fa-plus text-xs"></i>
+                        <span id="btn-text">Simpan</span>
+                    </button>
+                    <button type="button" onclick="resetForm()" class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium text-sm px-4 py-2.5 rounded-lg flex items-center gap-2 shadow-sm transition-all duration-150 active:scale-95">
+                        <i class="fa-solid fa-rotate-left text-xs text-gray-500"></i>
+                        <span>Reset</span>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- PANELS 2: TABEL DATA SISWA -->
+        <section class="card-panel p-5 sm:p-7">
+            <!-- Header Table & Search -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-list-ul text-brand-500 text-lg"></i>
+                    <h2 class="text-base sm:text-lg font-bold text-gray-800">Data Siswa</h2>
+                </div>
+                
+                <!-- Search Box -->
+                <div class="relative w-full sm:w-72">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                    <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Cari nama atau NIS..." class="form-input text-xs pl-9 py-2 bg-gray-50 focus:bg-white">
+                </div>
+            </div>
+
+            <!-- Tabel Responsive Container -->
+            <div class="overflow-x-auto rounded-xl border border-gray-100">
+                <table class="w-full text-left text-sm text-gray-600">
+                    <thead class="bg-gray-50/80 text-gray-700 font-semibold border-b border-gray-100 text-xs">
+                        <tr>
+                            <th scope="col" class="py-3.5 px-4 text-center w-12">No</th>
+                            <th scope="col" class="py-3.5 px-4">NIS</th>
+                            <th scope="col" class="py-3.5 px-4">Nama Lengkap</th>
+                            <th scope="col" class="py-3.5 px-4">Kelas</th>
+                            <th scope="col" class="py-3.5 px-4">Jenis Kelamin</th>
+                            <th scope="col" class="py-3.5 px-4">Tanggal Lahir</th>
+                            <th scope="col" class="py-3.5 px-4 text-center w-28">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="student-table-body" class="divide-y divide-gray-100">
+                        <!-- Data akan di-render di sini oleh JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Footer / Pagination -->
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 text-xs text-gray-500">
+                <div id="table-info">
+                    Menampilkan 1 - 5 dari 5 data
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-400 hover:bg-gray-50 transition disabled:opacity-50" disabled>
+                        <i class="fa-solid fa-chevron-left text-[10px]"></i>
+                    </button>
+                    <button class="w-8 h-8 flex items-center justify-center rounded-lg bg-brand-500 text-white font-medium shadow-sm">
+                        1
+                    </button>
+                    <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-400 hover:bg-gray-50 transition disabled:opacity-50" disabled>
+                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- LOGIKA JAVASCRIPT -->
+    <script>
+        // Data Awal Siswa (Sesuai dengan gambar)
+        let studentsData = [
+            { id: 1, nis: "001", nama: "Andi Setiawan", kelas: "X RPL 1", jenisKelamin: "Laki-laki", tanggalLahir: "2008-01-15" },
+            { id: 2, nis: "002", nama: "Budi Santoso", kelas: "X RPL 1", jenisKelamin: "Laki-laki", tanggalLahir: "2008-03-22" },
+            { id: 3, nis: "003", nama: "Citra Lestari", kelas: "X RPL 2", jenisKelamin: "Perempuan", tanggalLahir: "2008-07-10" },
+            { id: 4, nis: "004", nama: "Deni Pratama", kelas: "X RPL 2", jenisKelamin: "Laki-laki", tanggalLahir: "2008-09-05" },
+            { id: 5, nis: "005", nama: "Eka Wijaya", kelas: "X RPL 3", jenisKelamin: "Perempuan", tanggalLahir: "2008-11-18" }
+        ];
+
+        let deleteTargetId = null;
+
+        // Render data pertama kali saat halaman dimuat
+        window.onload = function() {
+            renderTable(studentsData);
+        };
+
+        // Fungsi untuk Merender Tabel
+        function renderTable(data) {
+            const tbody = document.getElementById("student-table-body");
+            tbody.innerHTML = "";
+
+            if (data.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="py-8 text-center text-gray-400">
+                            <i class="fa-regular fa-folder-open text-3xl mb-2 block"></i>
+                            Tidak ada data siswa ditemukan.
+                        </td>
+                    </tr>
+                `;
+                document.getElementById("table-info").innerText = "Menampilkan 0 data";
+                return;
+            }
+
+            data.forEach((student, index) => {
+                const tr = document.createElement("tr");
+                tr.className = "hover:bg-slate-50/60 transition-colors";
+
+                tr.innerHTML = `
+                    <td class="py-3.5 px-4 text-center font-medium text-gray-600">${index + 1}</td>
+                    <td class="py-3.5 px-4 font-normal text-gray-600">${student.nis}</td>
+                    <td class="py-3.5 px-4 font-normal text-gray-800">${student.nama}</td>
+                    <td class="py-3.5 px-4 font-normal text-gray-600">${student.kelas}</td>
+                    <td class="py-3.5 px-4 font-normal text-gray-600">${student.jenisKelamin}</td>
+                    <td class="py-3.5 px-4 font-normal text-gray-600">${student.tanggalLahir}</td>
+                    <td class="py-3.5 px-4 text-center">
+                        <div class="flex items-center justify-center gap-2">
+                            <button onclick="editStudent(${student.id})" class="w-8 h-8 rounded-lg bg-brand-500 hover:bg-brand-600 text-white flex items-center justify-center shadow-sm transition-all active:scale-95" title="Edit Data">
+                                <i class="fa-solid fa-pen text-xs"></i>
+                            </button>
+                            <button onclick="openDeleteModal(${student.id})" class="w-8 h-8 rounded-lg bg-red-500 hover:bg-red-600 text-white flex items-center justify-center shadow-sm transition-all active:scale-95" title="Hapus Data">
+                                <i class="fa-solid fa-trash text-xs"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Update Info Footer
+            document.getElementById("table-info").innerText = `Menampilkan 1 - ${data.length} dari ${studentsData.length} data`;
+        }
+
+        // Fungsi Tambah & Edit Data
+        function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const editId = document.getElementById("edit-id").value;
+            const nis = document.getElementById("nis").value.trim();
+            const nama = document.getElementById("nama").value.trim();
+            const kelas = document.getElementById("kelas").value;
+            const jenisKelamin = document.querySelector('input[name="jenis_kelamin"]:checked').value;
+            const tanggalLahir = document.getElementById("tanggal_lahir").value;
+
+            if (editId) {
+                // Update Data
+                const index = studentsData.findIndex(s => s.id == editId);
+                if (index !== -1) {
+                    studentsData[index] = { id: parseInt(editId), nis, nama, kelas, jenisKelamin, tanggalLahir };
+                    showToast("Data siswa berhasil diperbarui!", "success");
+                }
+            } else {
+                // Tambah Data Baru
+                const newStudent = {
+                    id: Date.now(),
+                    nis,
+                    nama,
+                    kelas,
+                    jenisKelamin,
+                    tanggalLahir
+                };
+                studentsData.push(newStudent);
+                showToast("Data siswa berhasil ditambahkan!", "success");
+            }
+
+            resetForm();
+            renderTable(studentsData);
+        }
+
+        // Fungsi Load Data ke Form untuk Edit
+        function editStudent(id) {
+            const student = studentsData.find(s => s.id === id);
+            if (!student) return;
+
+            document.getElementById("edit-id").value = student.id;
+            document.getElementById("nis").value = student.nis;
+            document.getElementById("nama").value = student.nama;
+            document.getElementById("kelas").value = student.kelas;
+            document.getElementById("tanggal_lahir").value = student.tanggalLahir;
+
+            // Radio button gender
+            const radios = document.getElementsByName("jenis_kelamin");
+            radios.forEach(r => {
+                if (r.value === student.jenisKelamin) r.checked = true;
+            });
+
+            // Update Tampilan UI Form ke Mode Edit
+            document.getElementById("form-title").innerText = "Edit Data Siswa";
+            document.getElementById("btn-text").innerText = "Update";
+            document.getElementById("btn-icon").className = "fa-solid fa-check text-xs";
+
+            // Scroll mulus ke bagian atas form
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Modal Hapus Data
+        function openDeleteModal(id) {
+            deleteTargetId = id;
+            document.getElementById("delete-modal").classList.remove("hidden");
+            document.getElementById("confirm-delete-btn").onclick = function() {
+                confirmDelete();
+            };
+        }
+
+        function closeDeleteModal() {
+            deleteTargetId = null;
+            document.getElementById("delete-modal").classList.add("hidden");
+        }
+
+        function confirmDelete() {
+            if (deleteTargetId !== null) {
+                studentsData = studentsData.filter(s => s.id !== deleteTargetId);
+                renderTable(studentsData);
+                showToast("Data siswa berhasil dihapus!", "delete");
+                closeDeleteModal();
+            }
+        }
+
+        // Fungsi Reset Form
+        function resetForm() {
+            document.getElementById("student-form").reset();
+            document.getElementById("edit-id").value = "";
+            
+            // Kembalikan Ke Mode Tambah
+            document.getElementById("form-title").innerText = "Tambah Data Siswa";
+            document.getElementById("btn-text").innerText = "Simpan";
+            document.getElementById("btn-icon").className = "fa-solid fa-plus text-xs";
+        }
+
+        // Pencarian Real-Time (Search)
+        function handleSearch() {
+            const keyword = document.getElementById("search-input").value.toLowerCase();
+            const filteredData = studentsData.filter(student => 
+                student.nama.toLowerCase().includes(keyword) || 
+                student.nis.toLowerCase().includes(keyword)
+            );
+            renderTable(filteredData);
+        }
+
+        // Toast Notification
+        function showToast(message, type) {
+            const toast = document.getElementById("toast-notification");
+            const toastMsg = document.getElementById("toast-message");
+            const toastIcon = document.getElementById("toast-icon");
+
+            toastMsg.innerText = message;
+
+            if (type === "delete") {
+                toast.classList.remove("border-brand-500");
+                toast.classList.add("border-red-500");
+                toastIcon.className = "fa-solid fa-circle-xmark text-red-500 text-xl mr-3";
+            } else {
+                toast.classList.remove("border-red-500");
+                toast.classList.add("border-brand-500");
+                toastIcon.className = "fa-solid fa-circle-check text-brand-500 text-xl mr-3";
+            }
+
+            toast.classList.remove("hidden");
+            
+            setTimeout(() => {
+                toast.classList.add("hidden");
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

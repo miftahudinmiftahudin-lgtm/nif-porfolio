@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration Form</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        body {
+            background-color: #ffe6e6; /* Warna background pink muda */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px 0;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 650px;
+            padding: 20px 40px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #000;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            width: 180px;
+            font-size: 18px;
+            color: #000;
+        }
+
+        .form-group .input-field {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid #7f9db9;
+            border-radius: 2px;
+            font-size: 14px;
+            outline: none;
+            background-color: #fff;
+        }
+
+        /* Styling khusus input pendek (Nama, DOB, Mobile) */
+        .name-inputs input {
+            width: 48%;
+        }
+
+        .dob-inputs input {
+            width: 60px;
+            text-align: center;
+        }
+
+        .dob-inputs span.hint {
+            font-style: italic;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        .mobile-inputs input[type="text"]:first-child {
+            width: 50px;
+            text-align: center;
+        }
+
+        .mobile-inputs input[type="text"]:last-child {
+            flex: 1;
+        }
+
+        /* Radio & Checkbox */
+        .radio-group, .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 16px;
+        }
+
+        .radio-group label, .checkbox-group label {
+            width: auto;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        /* Select box */
+        select {
+            text-align: center;
+        }
+
+        /* Textarea */
+        textarea {
+            height: 80px;
+            resize: vertical;
+        }
+
+        /* File Input */
+        input[type="file"] {
+            font-size: 14px;
+        }
+
+        /* Tombol Register */
+        .button-container {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .btn-submit {
+            padding: 4px 15px;
+            font-size: 14px;
+            background-color: #f0f0f0;
+            border: 1px solid #707070;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h1>Student Registration Form</h1>
+
+        <form action="#" method="POST">
+            
+            <!-- Roll no. -->
+            <div class="form-group">
+                <label>Roll no. :</label>
+                <div class="input-field">
+                    <input type="text" name="roll_no">
+                </div>
+            </div>
+
+            <!-- Student name -->
+            <div class="form-group">
+                <label>Student name :</label>
+                <div class="input-field name-inputs">
+                    <input type="text" name="first_name" placeholder="First Name">
+                    <span>-</span>
+                    <input type="text" name="last_name" placeholder="Last Name">
+                </div>
+            </div>
+
+            <!-- Father's name -->
+            <div class="form-group">
+                <label>Father's name :</label>
+                <div class="input-field">
+                    <input type="text" name="father_name">
+                </div>
+            </div>
+
+            <!-- Date of birth -->
+            <div class="form-group">
+                <label>Date of birth :</label>
+                <div class="input-field dob-inputs">
+                    <input type="text" name="dob_day" placeholder="Day">
+                    <span>-</span>
+                    <input type="text" name="dob_month" placeholder="Month">
+                    <span>-</span>
+                    <input type="text" name="dob_year" placeholder="Year">
+                    <span class="hint">(DD-MM-YYYY)</span>
+                </div>
+            </div>
+
+            <!-- Mobile no. -->
+            <div class="form-group">
+                <label>Mobile no. :</label>
+                <div class="input-field mobile-inputs">
+                    <input type="text" name="country_code" value="+91">
+                    <span>-</span>
+                    <input type="text" name="mobile_no">
+                </div>
+            </div>
+
+            <!-- Email id -->
+            <div class="form-group">
+                <label>Email id :</label>
+                <div class="input-field">
+                    <input type="email" name="email">
+                </div>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label>Password :</label>
+                <div class="input-field">
+                    <input type="password" name="password">
+                </div>
+            </div>
+
+            <!-- Gender -->
+            <div class="form-group">
+                <label>Gender :</label>
+                <div class="input-field radio-group">
+                    <label><input type="radio" name="gender" value="Male"> Male</label>
+                    <label><input type="radio" name="gender" value="Female"> Female</label>
+                </div>
+            </div>
+
+            <!-- Department -->
+            <div class="form-group">
+                <label>Department :</label>
+                <div class="input-field checkbox-group">
+                    <label><input type="checkbox" name="dept" value="CSE"> CSE</label>
+                    <label><input type="checkbox" name="dept" value="IT"> IT</label>
+                    <label><input type="checkbox" name="dept" value="ECE"> ECE</label>
+                    <label><input type="checkbox" name="dept" value="Civil"> Civil</label>
+                    <label><input type="checkbox" name="dept" value="Mech"> Mech</label>
+                </div>
+            </div>
+
+            <!-- Course -->
+            <div class="form-group">
+                <label>Course :</label>
+                <div class="input-field">
+                    <select name="course">
+                        <option value="">------------------------- Select Current Course's -------------------------</option>
+                        <option value="btech">B.Tech</option>
+                        <option value="mtech">M.Tech</option>
+                        <option value="bca">BCA</option>
+                        <option value="mca">MCA</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Student photo -->
+            <div class="form-group">
+                <label>Student photo :</label>
+                <div class="input-field">
+                    <input type="file" name="student_photo">
+                </div>
+            </div>
+
+            <!-- City -->
+            <div class="form-group">
+                <label>City :</label>
+                <div class="input-field">
+                    <input type="text" name="city">
+                </div>
+            </div>
+
+            <!-- Address -->
+            <div class="form-group">
+                <label>Address :</label>
+                <div class="input-field">
+                    <textarea name="address"></textarea>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="button-container">
+                <button type="submit" class="btn-submit">Register</button>
+            </div>
+
+        </form>
+    </div>
+
+</body>
+</html>

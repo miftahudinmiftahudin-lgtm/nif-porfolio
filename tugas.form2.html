@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account Form</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #426375, #2f4e5e);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .card {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        .card-header {
+            background-color: #ececec;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .card-header h2 {
+            margin: 0;
+            color: #555;
+            font-size: 26px;
+            font-weight: 600;
+        }
+        .card-body {
+            padding: 25px 30px;
+        }
+        .row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            color: #12b085; 
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #dcdcdc;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            color: #333;
+            background-color: #fafafa;
+        }
+        input::placeholder {
+            color: #ccc;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #12b085;
+            background-color: #fff;
+        }
+        .inline-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            height: 38px;
+            font-size: 14px;
+            color: #444;
+        }
+        .inline-group label {
+            color: #444;
+            font-weight: normal;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            height: 38px;
+        }
+        input[type="range"] {
+            flex: 1;
+            accent-color: #12b085;
+            cursor: pointer;
+        }
+        .badge {
+            background-color: #12b085;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: bold;
+            min-width: 42px;
+            text-align: center;
+        }
+        input[type="file"] {
+            padding: 5px 0;
+            font-size: 13px;
+            color: #555;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .card-footer {
+            background-color: #ececec;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: flex-end;
+            border-top: 1px solid #e0e0e0;
+        }
+        .btn-submit {
+            background-color: #12b085;
+            color: white;
+            border: none;
+            padding: 10px 28px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-submit:hover {
+            background-color: #0e936f;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="card-header">
+            <h2>Create Account</h2>
+        </div>
+        <form action="#" method="POST">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <label for="fname">First name *</label>
+                        <input type="text" id="fname" placeholder="enter your first name" required>
+                    </div>
+                    <div class="col">
+                        <label for="lname">Last name</label>
+                        <input type="text" id="lname" placeholder="enter your last name">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="email">Email*</label>
+                        <input type="email" id="email" placeholder="enter your email" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="password">Password *</label>
+                        <input type="password" id="password" placeholder="enter your password" required>
+                    </div>
+                    <div class="col">
+                        <label for="cpassword">Confirm Password *</label>
+                        <input type="password" id="cpassword" placeholder="enter your password again" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Gender:</label>
+                        <div class="inline-group">
+                            <label><input type="radio" name="gender" value="male"> Male</label>
+                            <label><input type="radio" name="gender" value="female"> Female</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label>Hobbies</label>
+                        <div class="inline-group">
+                            <label><input type="checkbox" name="hobby" value="music"> Music</label>
+                            <label><input type="checkbox" name="hobby" value="sports"> Sports</label>
+                            <label><input type="checkbox" name="hobby" value="travel"> Travel</label>
+                            <label><input type="checkbox" name="hobby" value="movies"> Movies</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="source">Source of Income</label>
+                        <select id="source">
+                            <option value="employed">Employed</option>
+                            <option value="self-employed">Self-Employed</option>
+                            <option value="unemployed">Unemployed</option>
+                            <option value="student">Student</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="income">Income</label>
+                        <div class="slider-container">
+                            <input type="range" id="income" min="0" max="100" value="20" oninput="updateIncomeVal(this.value)">
+                            <span class="badge" id="incomeVal">20K</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="photo">Upload Profile Picture</label>
+                        <input type="file" id="photo">
+                    </div>
+                    <div class="col">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" value="18" min="0">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="bio">Bio</label>
+                        <textarea id="bio"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn-submit">Create</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        function updateIncomeVal(val) {
+            document.getElementById('incomeVal').innerText = val + 'K';
+        }
+    </script>
+</body>
+</html>
